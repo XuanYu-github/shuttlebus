@@ -1,20 +1,65 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 🚌 科学岛班车时刻表
 
-# Run and deploy your AI Studio app
+**非官方个人维护项目**，数据来源于微信公众号"科学岛服务"，仅供参考。如遇特殊情况，请以车辆指示牌为准。
 
-This contains everything you need to run your app locally.
+## ✨ 功能特性
 
-View your app in AI Studio: https://ai.studio/apps/7063d722-f872-4f23-ae19-7bd66b877e1e
+- **全部班车浏览**：按分类（日常班车、博士生上课班车、高研院班车等）展示全部路线，含途经站详情
+- **行程规划**：选择出发地和目的地，自动筛选合适去程/返程班车，支持多站点选择
+- **收藏路线**：保存常用出行组合，一键快速调用
+- **收藏地点**：在下拉列表中标记常用站点，优先显示
+- **内置地图**：点击路线卡片右上角地图图标，在内嵌地图中查看路线及各站点位置
+- **预计到达时间**：基于路况计算预计抵达时间（仅供参考）
+- **深色模式**：支持浅色/深色/跟随系统三种主题
 
-## Run Locally
+## 🚀 本地运行
 
-**Prerequisites:**  Node.js
+**前置要求**：Node.js （推荐 v18+）
 
+```bash
+# 安装依赖
+npm install
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+# 启动开发服务器（默认 http://localhost:3000）
+npm run dev
+
+# 构建生产版本
+npm run build
+```
+
+## 📁 项目结构
+
+```
+├── src/
+│   ├── App.tsx          # 主应用组件（路由、筛选、地图逻辑）
+│   ├── data.ts          # 所有班车路线数据（核心数据文件）
+│   ├── mapData.ts       # 站点经纬度坐标数据
+│   ├── drivingData.ts   # 预计行驶时间数据
+│   ├── main.tsx         # 应用入口
+│   └── index.css        # 全局样式
+├── index.html           # HTML 入口
+├── vite.config.ts       # Vite 构建配置
+└── package.json
+```
+
+## 📝 如何更新班车数据
+
+所有班车信息均存储在 [`src/data.ts`](./src/data.ts) 中，每条路线格式如下：
+
+```typescript
+{
+  category: '日常班车时刻表（周一至周五）', // 班车分类
+  busName: '1号车',                        // 车辆名称
+  plateNumber: '皖A00435D',               // 车牌号
+  departureTime: '07:18',                 // 出发时间
+  departureLocation: '市府广场(安庆路)',    // 出发地
+  arrivalLocation: '等离子体所(北广场)',    // 终点
+  stops: ['公安厅', '安光所', '二号楼'],   // 途经站（不含起终点）
+  note: '返程马路对面上车',               // 注意事项（可选）
+}
+```
+
+## ⚠️ 免责声明
+
+本项目为非官方个人维护，数据可能存在滞后或错误。  
+官方班车信息请通过微信公众号 **"科学岛服务"** 的 **"班车查询"** 界面确认。

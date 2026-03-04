@@ -25,3 +25,11 @@ tmp_extract.js
 tmp_extract.py
 tmp_stops.json
 metadata.json
+
+# Scripts contain Baidu Maps / Geocoding API keys
+scripts/
+
+# Playwright test framework files (not part of core app)
+playwright.config.ts
+e2e/
+tests/
