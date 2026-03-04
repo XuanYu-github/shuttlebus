@@ -1,0 +1,27 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Sensitive files containing API keys
+双击打开班车网页.html
+
+# Original legacy files
+原版班车网页/
+
+# Temporary data/extraction scripts
+tmp_extract.js
+tmp_extract.py
+tmp_stops.json
+metadata.json
