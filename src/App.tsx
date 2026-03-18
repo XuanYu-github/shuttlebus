@@ -366,6 +366,20 @@ type FavoriteRoute = {
   returnTime: string;
 };
 
+const categoryOrder = [
+  '市内班车（周一至周五）',
+  '科学家园班车（周一至周五）',
+  '聚贤苑—聚变堆园区（北门）班车（周一至周五）',
+  '高研院班车（周一至周五）',
+  '博士生班车（科大东区，周一至周五）',
+  '博士生班车（科大高新校区，周一至周五）',
+  '研究生班车（工研院）',
+  '附属学校班车（周一至周五）',
+  '三十岗公寓班车（周一至周五）',
+  '三十岗公寓班车（周六）',
+  '三十岗公寓班车（周日）',
+];
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<'all' | 'plan'>('all');
   const [selectedShuttle, setSelectedShuttle] = useState<Shuttle | null>(null);
@@ -526,6 +540,15 @@ export default function App() {
     return groups;
   }, []);
 
+  const orderedGroupedData = useMemo<[string, Shuttle[]][]>(() => {
+    const groupedEntries = Object.entries(groupedData) as [string, Shuttle[]][];
+    const ordered = categoryOrder
+      .filter(category => groupedData[category])
+      .map(category => [category, groupedData[category]] as [string, Shuttle[]]);
+    const extras = groupedEntries.filter(([category]) => !categoryOrder.includes(category));
+    return [...ordered, ...extras];
+  }, [groupedData]);
+
   const planResults = useMemo(() => {
     if (planDeparture.length === 0 || planArrival.length === 0) return null;
 
@@ -669,7 +692,7 @@ export default function App() {
       <div className="px-4">
         {activeTab === 'all' && (
           <div className="space-y-6">
-            {(Object.entries(groupedData) as [string, Shuttle[]][]).map(([category, shuttles]) => (
+            {orderedGroupedData.map(([category, shuttles]) => (
               <div key={category}>
                 <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-3 pl-1 border-l-4 border-indigo-500 transition-colors">{category}</h2>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
