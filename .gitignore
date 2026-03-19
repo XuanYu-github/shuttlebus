@@ -24,6 +24,8 @@ coverage/
 tmp_extract.js
 tmp_extract.py
 tmp_stops.json
+tmp_*
+outputs/
 metadata.json
 
 # Scripts contain Baidu Maps / Geocoding API keys
