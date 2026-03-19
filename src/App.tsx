@@ -555,6 +555,24 @@ export default function App() {
     // A helper to get the array of all stops in order for a shuttle
     const getOrderedStops = (s: Shuttle) => [s.departureLocation, ...(s.stops || []), s.arrivalLocation];
 
+    const dedupeShuttles = (items: Shuttle[]) => {
+      const seen = new Set<string>();
+      return items.filter((s) => {
+        const signature = [
+          s.busName,
+          s.plateNumber,
+          s.departureTime,
+          s.departureLocation,
+          s.arrivalLocation,
+          (s.stops || []).join('>'),
+          s.note || '',
+        ].join('|');
+        if (seen.has(signature)) return false;
+        seen.add(signature);
+        return true;
+      });
+    };
+
     // Outbound logic: departure must appear BEFORE arrival in the ordered stops
     const isOutbound = (s: Shuttle) => {
       const ordered = getOrderedStops(s);
@@ -585,14 +603,18 @@ export default function App() {
       return false;
     };
 
-    const outbound = shuttleData.filter(s => 
-      isOutbound(s) &&
-      (s.departureTime.startsWith('即刻返回') || s.departureTime >= planOutboundTime)
+    const outbound = dedupeShuttles(
+      shuttleData.filter(s => 
+        isOutbound(s) &&
+        (s.departureTime.startsWith('即刻返回') || s.departureTime >= planOutboundTime)
+      )
     ).sort((a, b) => a.departureTime.localeCompare(b.departureTime));
 
-    const returnTrips = shuttleData.filter(s => 
-      isReturn(s) &&
-      (s.departureTime.startsWith('即刻返回') || s.departureTime >= planReturnTime)
+    const returnTrips = dedupeShuttles(
+      shuttleData.filter(s => 
+        isReturn(s) &&
+        (s.departureTime.startsWith('即刻返回') || s.departureTime >= planReturnTime)
+      )
     ).sort((a, b) => a.departureTime.localeCompare(b.departureTime));
 
     return { outbound, returnTrips };
